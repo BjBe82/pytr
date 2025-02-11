@@ -201,9 +201,7 @@ class DL:
         filepath_with_doc_id = f"{filepath_with_doc_id}.pdf"
 
         filepath = Path(os.path.join(self.output_path, filepath))
-        filepath_with_doc_id = Path(
-            os.path.join(self.output_path, filepath_with_doc_id)
-        )
+        filepath_with_doc_id = Path(os.path.join(self.output_path, filepath_with_doc_id))
 
         self.__dl_doc(doc, doc_url, doc_id, filepath, filepath_with_doc_id)
 
@@ -281,7 +279,6 @@ class DL:
             self.log.debug(f"Added {filepath} to queue")
         else:
             self.log.debug(f"file {filepath} already exists. Skipping...")
-
 
     def __get_file_destination_provider(self):
         return FileDestinationProvider()
