@@ -199,6 +199,11 @@ def get_main_parser():
         help='Two letter language code or "auto" for system language',
         default="auto",
     )
+    parser_export_transactions.add_argument(
+        "--date-isoformat",
+        help="Format the date column in ISO8601 including the time.",
+        action="store_true",
+    )
 
     info = "Print shell tab completion"
     parser_completion = parser_cmd.add_parser(
@@ -307,7 +312,7 @@ def main():
         if args.output is not None:
             p.portfolio_to_csv(args.output)
     elif args.command == "export_transactions":
-        export_transactions(args.input, args.output, args.lang, args.sort)
+        export_transactions(args.input, args.output, args.lang, args.sort, args.date_isoformat)
     elif args.version:
         installed_version = version("pytr")
         print(installed_version)

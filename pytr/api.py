@@ -30,12 +30,13 @@ import time
 import urllib.parse
 import uuid
 from http.cookiejar import MozillaCookieJar
+from typing import Any, Dict
 
 import certifi
 import requests
 import websockets
-from ecdsa import NIST256p, SigningKey
-from ecdsa.util import sigencode_der
+from ecdsa import NIST256p, SigningKey  # type: ignore[import-untyped]
+from ecdsa.util import sigencode_der  # type: ignore[import-untyped]
 
 from pytr.app_path import BASE_DIR, COOKIES_FILE, CREDENTIALS_FILE, KEY_FILE
 from pytr.utils import get_logger
@@ -58,8 +59,8 @@ class TradeRepublicApi:
     _ws = None
     _lock = asyncio.Lock()
     _subscription_id_counter = 1
-    _previous_responses = {}
-    subscriptions = {}
+    _previous_responses: Dict[str, str] = {}
+    subscriptions: Dict[str, Dict[str, Any]] = {}
 
     _credentials_file = CREDENTIALS_FILE
     _cookies_file = COOKIES_FILE

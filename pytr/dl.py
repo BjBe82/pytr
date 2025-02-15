@@ -5,7 +5,7 @@ from datetime import datetime
 from pathlib import Path
 
 from pathvalidate import sanitize_filepath
-from requests_futures.sessions import FuturesSession
+from requests_futures.sessions import FuturesSession  # type: ignore[import-untyped]
 
 from pytr.api import TradeRepublicError
 from pytr.file_destination_provider import FileDestinationProvider
