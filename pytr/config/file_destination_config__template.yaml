@@ -111,7 +111,10 @@ destination:
 
   # Savings plan
   savings_plan:
-    pattern: [{event_type: "SAVINGS_PLAN_INVOICE_CREATED"}, {event_type: "SAVINGS_PLAN_EXECUTED"}, {event_type: "SAVINGS_PLAN_CANCELED"}]
+    pattern: [{event_type: "SAVINGS_PLAN_INVOICE_CREATED"}, 
+      {event_type: "SAVINGS_PLAN_EXECUTED"},
+      {event_type: "trading_savingsplan_executed"}, # New Event type for savings plan 16.02.2025
+      {event_type: "SAVINGS_PLAN_CANCELED"}]
     path: "Stocks/Savings plan/{iso_date_year}/"
 
   # pre-determined tax base earning
@@ -192,9 +195,9 @@ destination:
   # German Vorabpauschale
   vorabpauschale:
     pattern: [{event_type: "ssp_corporate_action_invoice_shares", event_subtitle: "Vorabpauschale"}]
-    path: "Vorabpauschale/"
+    path: "Tax/Vorabpauschale/"
     filename: "{iso_date} {document_title} - {event_title}"
-    
+
   # annual tax report for account
   account_tax_report:
     pattern: [{event_type: "TAX_REFUND"}, {event_type: "TAX_ENGINE_ANNUAL_REPORT"}, {event_type: "YEAR_END_TAX_REPORT"}]
