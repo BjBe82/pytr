@@ -25,6 +25,7 @@ destination:
     pattern: [
         {event_type: "ORDER_EXECUTED", document_title: "Abrechnung(.\\d+)?"}, # mit limit verkauft
         {event_type: "TRADE_INVOICE", document_title: "Abrechnung(.\\d+)?"}, # mit limit gekauft
+        {event_type: "trading_trade_executed", document_title: "Abrechnung(.\\d+)?"}, # Aktien kauf neues Event 07.03.2025
         {event_type: "STOCK_PERK_REFUNDED", document_title: "Abrechnung(.\\d+)?"}, # Aktiengeschenk
         {event_type: "SHAREBOOKING", document_title: "Abrechnung(.\\d+)?"}, # Kapitalmassnahme
       ]
@@ -33,7 +34,9 @@ destination:
   stock_order_cost_report:
     pattern: [
         {event_type: "ORDER_CREATED", document_title: "Kosteninformation(.\\d+)?"}, # limit erstellt
+        {event_type: "trading_order_created", document_title: "Kosteninformation(.\\d+)?"}, # Limit Order neues Event 07.03.2025
         {event_type: "ORDER_EXECUTED", document_title: "Kosteninformation(.\\d+)?"},
+        {event_type: "trading_trade_executed", document_title: "Kosteninformation(.\\d+)?"}, # Aktien kauf neues Event 07.03.2025
         {event_type: "TRADE_INVOICE", document_title: "Kosteninformation(.\\d+)?"},
         {event_type: "STOCK_PERK_REFUNDED", document_title: "Kosteninformation(.\\d+)?"}, # Aktiengeschenk
         {event_type: "EX_POST_COST_REPORT"},
@@ -41,7 +44,12 @@ destination:
     path: "Stocks/Cost report/{iso_date_year}/"
 
   stock_order_created:
-    pattern: [{event_type: "ORDER_CREATED", document_title: "Auftragsbestätigung(.\\d+)?"}, {event_type: "ORDER_EXECUTED", document_title: "Auftragsbestätigung(.\\d+)?"}, {event_type: "TRADE_INVOICE", document_title: "Auftragsbestätigung(.\\d+)?"}]
+    pattern: [
+        {event_type: "ORDER_CREATED", document_title: "Auftragsbestätigung(.\\d+)?"},
+        {event_type: "trading_order_created", document_title: "Auftragsbestätigung(.\\d+)?"}, # Limit Order neues Event 07.03.2025
+        {event_type: "ORDER_EXECUTED", document_title: "Auftragsbestätigung(.\\d+)?"},
+        {event_type: "TRADE_INVOICE", document_title: "Auftragsbestätigung(.\\d+)?"}
+     ]
     path: "Stocks/Order created/{iso_date_year}/"
 
   stock_order_canceled:
