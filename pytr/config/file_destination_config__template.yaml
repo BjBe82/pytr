@@ -47,13 +47,18 @@ destination:
     pattern: [
         {event_type: "ORDER_CREATED", document_title: "Auftragsbestätigung(.\\d+)?"},
         {event_type: "trading_order_created", document_title: "Auftragsbestätigung(.\\d+)?"}, # Limit Order neues Event 07.03.2025
+        {event_type: "trading_trade_executed", document_title: "Auftragsbestätigung(.\\d+)?"},
         {event_type: "ORDER_EXECUTED", document_title: "Auftragsbestätigung(.\\d+)?"},
         {event_type: "TRADE_INVOICE", document_title: "Auftragsbestätigung(.\\d+)?"}
      ]
     path: "Stocks/Order created/{iso_date_year}/"
 
   stock_order_canceled:
-    pattern: [{event_type: "TRADE_CANCELED"}, {event_type: "ORDER_CANCELED"}]
+    pattern: [
+        {event_type: "TRADE_CANCELED"}, 
+        {event_type: "ORDER_CANCELED"},
+        {event_type: "trading_order_cancelled"}, # Limit Order neues Event 07.03.2025
+      ]
     path: "Stocks/Order canceled/{iso_date_year}/"
 
   order_expired:
