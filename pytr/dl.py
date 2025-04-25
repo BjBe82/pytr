@@ -23,8 +23,12 @@ class DL:
         history_file="pytr_history",
         max_workers=8,
         universal_filepath=False,
+        lang="en",
+        date_with_time=True,
+        decimal_localization=False,
         sort_export=False,
         use_destination_config=False,
+        format_export="csv",
     ):
         """
         tr: api object
@@ -38,9 +42,13 @@ class DL:
         self.filename_fmt = filename_fmt
         self.since_timestamp = since_timestamp
         self.universal_filepath = universal_filepath
+        self.lang = lang
+        self.date_with_time = date_with_time
+        self.decimal_localization = decimal_localization
         self.sort_export = sort_export
         self.file_destination_provider = self.__get_file_destination_provider()
         self.use_destination_config = use_destination_config
+        self.format_export = format_export
 
         self.session = FuturesSession(max_workers=max_workers, session=self.tr._websession)
         self.futures = []
