@@ -156,9 +156,9 @@ def get_main_parser():
     parser_dl_docs.add_argument("output", help="Output directory", metavar="PATH", type=Path)
     parser_dl_docs.add_argument(
         "--format",
-        help="available variables:\tiso_date, time, title, doc_num, subtitle, id",
+        help="available variables:\tiso_date, time, title, subtitle, doc_num, id",
         metavar="FORMAT_STRING",
-        default="{iso_date}{time} {title}{doc_num}",
+        default="{iso_date} {time} {title}",
     )
     parser_dl_docs.add_argument(
         "--use_destination_config",
@@ -210,17 +210,27 @@ def get_main_parser():
     parser_details.add_argument("isin", help="ISIN of intrument")
 
     # get_price_alarms
-    info = "Get overview of current price alarms"
-    parser_cmd.add_parser(
+    info = "Get current price alarms"
+    parser_get_price_alarms = parser_cmd.add_parser(
         "get_price_alarms",
         formatter_class=formatter,
         parents=[parser_login_args],
         help=info,
         description=info,
     )
+    parser_get_price_alarms.add_argument(
+        "input", nargs="*", help="Input data in the form of <ISIN1> <ISIN2> ...", default=[]
+    )
+    parser_get_price_alarms.add_argument(
+        "--outputfile",
+        help="Output file path",
+        type=argparse.FileType("w", encoding="utf-8"),
+        default="-",
+        nargs="?",
+    )
 
     # set_price_alarms
-    info = "Set price alarms based on diff from current price"
+    info = "Set new price alarms"
     parser_set_price_alarms = parser_cmd.add_parser(
         "set_price_alarms",
         formatter_class=formatter,
@@ -229,12 +239,20 @@ def get_main_parser():
         description=info,
     )
     parser_set_price_alarms.add_argument(
-        "-%",
-        "--percent",
-        help="Percentage +/-",
-        metavar="[-1000 ... 1000]",
-        type=int,
-        default=-10,
+        "input", nargs="*", help="Input data in the form of <ISIN> <alarm1> <alarm2> ...", default=[]
+    )
+    parser_set_price_alarms.add_argument(
+        "--remove-current-alarms",
+        action=argparse.BooleanOptionalAction,
+        default=True,
+        help="Whether to remove current alarms.",
+    )
+    parser_set_price_alarms.add_argument(
+        "--inputfile",
+        help="Input file path",
+        type=argparse.FileType("r", encoding="utf-8"),
+        default="-",
+        nargs="?",
     )
 
     # export_transactions
@@ -249,12 +267,12 @@ def get_main_parser():
     parser_export_transactions.add_argument(
         "input",
         help="Input path to JSON (use all_events.json from dl_docs)",
-        type=argparse.FileType("r", encoding="utf8"),
+        type=argparse.FileType("r", encoding="utf-8"),
     )
     parser_export_transactions.add_argument(
         "output",
         help="Output file path",
-        type=argparse.FileType("w", encoding="utf8"),
+        type=argparse.FileType("w", encoding="utf-8"),
         default="-",
         nargs="?",
     )
@@ -341,18 +359,37 @@ def main():
             format_export=args.export_format,
         )
         asyncio.get_event_loop().run_until_complete(dl.dl_loop())
-    elif args.command == "set_price_alarms":
-        # TODO
-        print("Not implemented yet")
     elif args.command == "get_price_alarms":
-        Alarms(
-            login(
-                phone_no=args.phone_no,
-                pin=args.pin,
-                web=not args.applogin,
-                store_credentials=args.store_credentials,
-            )
-        ).get()
+        try:
+            Alarms(
+                login(
+                    phone_no=args.phone_no,
+                    pin=args.pin,
+                    web=not args.applogin,
+                    store_credentials=args.store_credentials,
+                ),
+                args.input,
+                args.outputfile,
+            ).get()
+        except ValueError as e:
+            print(e)
+            return -1
+    elif args.command == "set_price_alarms":
+        try:
+            Alarms(
+                login(
+                    phone_no=args.phone_no,
+                    pin=args.pin,
+                    web=not args.applogin,
+                    store_credentials=args.store_credentials,
+                ),
+                args.input,
+                args.inputfile,
+                args.remove_current_alarms,
+            ).set()
+        except ValueError as e:
+            print(e)
+            return -1
     elif args.command == "details":
         Details(
             login(
