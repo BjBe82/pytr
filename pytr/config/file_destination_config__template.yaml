@@ -211,9 +211,9 @@ destination:
     path: "Tax/Vorabpauschale/"
     filename: "{iso_date} {document_title} - {event_title}"
 
-  # annual tax report for account
+  # annual tax report for account 
   account_tax_report:
-    pattern: [{event_type: "TAX_REFUND"}, {event_type: "TAX_ENGINE_ANNUAL_REPORT"}, {event_type: "YEAR_END_TAX_REPORT"}]
+    pattern: [{event_type: "TAX_REFUND"}, {event_type: "TAX_ENGINE_ANNUAL_REPORT"}, {event_type: "YEAR_END_TAX_REPORT"}, {event_type: "TAX_YEAR_END_REPORT"}]
     path: "Tax/"
     filename: "{iso_date} {document_title}"
 
