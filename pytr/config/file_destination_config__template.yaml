@@ -82,6 +82,7 @@ destination:
   stock_notice_3:
     pattern: [
         {event_type: "SHAREBOOKING_TRANSACTIONAL"},
+        {event_type: "EX_POST_COST_REPORT_CREATED"},
         {event_type: "INSTRUCTION_CORPORATE_ACTION", document_title: "Kundenanschreiben(.\\d+)?"}, #Kapitalerhöhung gegen Bar
       ]
     path: "Stocks/Notice/{iso_date_year}/"
