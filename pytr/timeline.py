@@ -180,9 +180,9 @@ class Timeline:
                 "trading_trade_executed": "Trades",
                 "INTEREST_PAYOUT": "Zinsen",
                 "INTEREST_PAYOUT_CREATED": "Zinsen",
-            }.get(event["eventType"])
+            }.get(event.get("eventType"), None)
             if subfolder is None:
-                print(f"no mapping for {event['eventType']}")
+                print(f"no mapping for {event.get('eventType')}")
 
             for doc in section["data"]:
                 timestamp_str = event["timestamp"]
@@ -200,9 +200,9 @@ class Timeline:
                     if dl.use_destination_config:
                         dl.dl_custom_doc(
                             doc,
-                            event["eventType"],
-                            event["title"],
-                            event["subtitle"],
+                            event.get("eventType", None),
+                            event.get("title", None),
+                            event.get("subtitle", None),
                             section["title"],
                             docdate,
                         )

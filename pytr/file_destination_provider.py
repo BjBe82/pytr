@@ -137,7 +137,7 @@ class FileDestinationProvider:
             )
             return self.__create_file_path(self._unknown_file_config, variables)
 
-        if len(matching_configs) > 1:
+        if len(matching_configs) > 1 and self.__are_different_configs(matching_configs):
             self._log.debug(
                 f"Multiple Destination Patterns where found. Using 'multiple_match' config! Parameter: event_type:{event_type}, event_title:{event_title},event_subtitle:{event_subtitle},section_title:{section_title},document_title:{document_title}"
             )
@@ -148,6 +148,7 @@ class FileDestinationProvider:
     @staticmethod
     def __is_matching_config(config: DestinationConfig, field_name: str, search_pattern: str) -> bool:
         pattern = config.pattern
+
         return getattr(pattern, field_name, None) is None or re.fullmatch(
             getattr(pattern, field_name, None), search_pattern
         )
@@ -210,3 +211,14 @@ class FileDestinationProvider:
     def __create_default_config(self, config_file_path: Path):
         path = files(pytr.config).joinpath(TEMPLATE_FILE_NAME)
         shutil.copyfile(path, config_file_path)
+
+    def __are_different_configs(self, configs: list[DestinationConfig]) -> bool:
+        if len(configs) < 2:
+            return False
+
+        first_config_name = configs[0].config_name
+        for config in configs[1:]:
+            if config.config_name != first_config_name:
+                return True
+
+        return False
